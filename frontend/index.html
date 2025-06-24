@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Packer Inc</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Item Packer Inc</h1>
+        </header>
+
+        <div class="button-link-container">
+            <a href="/swagger" target="_blank" class="button-link">API Documentation (Swagger)</a>
+            <a href="https://github.com/Corel-frim/item-packer-inc" target="_blank" class="button-link">Source code (GitHub)</a>
+        </div>
+
+        <nav>
+            <ul class="tabs">
+                <li class="tab active" data-tab="packs">Packs</li>
+                <li class="tab" data-tab="orders">Orders</li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- Packs Tab -->
+            <section id="packs-section" class="tab-content active">
+                <h2>Manage Packs</h2>
+                <div class="card">
+                    <h3>Add New Pack</h3>
+                    <form id="add-pack-form">
+                        <div class="form-group">
+                            <label for="pack-amount">Amount:</label>
+                            <input type="number" id="pack-amount" min="1" required>
+                        </div>
+                        <button type="submit" class="btn">Add Pack</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Available Packs</h3>
+                    <div class="table-container">
+                        <table id="packs-table">
+                            <thead>
+                                <tr>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Pack rows will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Orders Tab -->
+            <section id="orders-section" class="tab-content">
+                <h2>Manage Orders</h2>
+                <div class="card">
+                    <h3>Create New Order</h3>
+                    <div class="warning-box">
+                        <p class="warning-text">⚠️ Note: The merging functionality works well with times n packs (e.g. 2x250 and 3x250 would successfully be merged with (250, 500) and (250, 750) packs), but it would not work with decimal point factor difference (1x150 + 99 remaining items wouldn't convert to 1x250, it will be 2x150).
+                            <br><br>📍 Potential improvements that I've decided to not work on to save time, but worth mentioning:
+                            <br> - Packs merging works only for each pack separately, but not cross-pack (it can merge 2x250 to 1x500, but can't merge 1x250 + 1x500 to 1x750);
+                            <br> - Unit tests cover mostly positive and edge basic cases, but not cover any tricky cases like one with 250+500 merging;
+                            <br> - Decimal point factor difference for packs, as mentioned above;
+                            <br> - UI is not good enough, but basic functionality works;
+                        </p>
+                    </div>
+                    <form id="create-order-form">
+                        <div class="form-group">
+                            <label for="order-amount">Number of Items:</label>
+                            <input type="number" id="order-amount" min="1" required>
+                        </div>
+                        <button type="submit" class="btn">Create Order</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Order Results</h3>
+                    <div id="order-result" class="hidden">
+                        <div class="result-item">
+                            <span>Requested Items:</span>
+                            <span id="requested-items">0</span>
+                        </div>
+                        <div class="result-item">
+                            <span>Overpacked Items:</span>
+                            <span id="overpacked-items">0</span>
+                        </div>
+                        <div class="result-item">
+                            <span>Total Items:</span>
+                            <span id="total-items">0</span>
+                        </div>
+                        <h4>Packs:</h4>
+                        <ul id="order-packs">
+                            <!-- Order packs will be added here dynamically -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Previous Orders</h3>
+                    <div class="table-container">
+                        <table id="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Requested Items</th>
+                                    <th>Overpacked Items</th>
+                                    <th>Total Items</th>
+                                    <th>Packs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Order rows will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Item Packer Inc</p>
+        </footer>
+    </div>
+
+    <!-- Modal for updating pack -->
+    <div id="update-pack-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Update Pack</h3>
+            <form id="update-pack-form">
+                <input type="hidden" id="update-old-amount">
+                <div class="form-group">
+                    <label for="update-new-amount">New Amount:</label>
+                    <input type="number" id="update-new-amount" min="1" required>
+                </div>
+                <button type="submit" class="btn">Update</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/packs.js"></script>
+    <script src="js/orders.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

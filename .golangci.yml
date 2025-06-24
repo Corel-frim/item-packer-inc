@@ -1,0 +1,24 @@
+linters:
+  enable:
+    - govet        # reports suspicious constructs
+    - errcheck     # checks for unchecked errors
+    - gosimple     # simplify code
+    - gosec       # security problems
+    - gofmt       # formatting
+    - goimports   # imports formatting
+    - revive      # fast, configurable, extensible linter
+    - prealloc    # finds slice declarations that could be pre-allocated
+    - noctx       # checks for context.Context usage
+    - makezero    # checks for non-zero array/slice/map length declarations
+    - goconst    # checks for repeated strings that could be replaced with a constant
+    - usestdlibvars # checks for usage of standard library variables
+    - whitespace # checks for whitespace issues
+
+linters-settings:
+  revive:
+    rules:
+      - name: exported
+        arguments:
+          - disableStutteringCheck
+run:
+  deadline: 5m

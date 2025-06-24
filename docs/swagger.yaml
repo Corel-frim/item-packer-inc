@@ -1,0 +1,176 @@
+basePath: /
+definitions:
+  models.Order:
+    properties:
+      overpackedItems:
+        type: integer
+      packs:
+        items:
+          $ref: '#/definitions/models.OrderPack'
+        type: array
+      requestedItems:
+        type: integer
+      totalItems:
+        type: integer
+    type: object
+  models.OrderPack:
+    properties:
+      pack:
+        $ref: '#/definitions/models.Pack'
+      quantity:
+        type: integer
+    type: object
+  models.Pack:
+    properties:
+      amount:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for packing items into standard sized packs
+  title: Item Packer API
+  version: "1.0"
+paths:
+  /order/items/{amount}:
+    post:
+      description: Create an order with the specified number of items
+      parameters:
+      - description: Number of items
+        in: path
+        name: amount
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+        "400":
+          description: Invalid amount
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: No packs available
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create an order
+      tags:
+      - orders
+  /packs:
+    get:
+      description: Get a list of all available packs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Pack'
+            type: array
+      summary: Get all available packs
+      tags:
+      - packs
+  /packs/{amount}:
+    delete:
+      description: Delete a pack with the specified amount
+      parameters:
+      - description: Pack amount
+        in: path
+        name: amount
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Invalid amount
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a pack
+      tags:
+      - packs
+    post:
+      description: Add a new pack with the specified amount
+      parameters:
+      - description: Pack amount
+        in: path
+        name: amount
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Pack'
+        "400":
+          description: Invalid amount
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Limit for packs reached
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add a new pack
+      tags:
+      - packs
+  /packs/{oldAmount}/{newAmount}:
+    put:
+      description: Update a pack's amount
+      parameters:
+      - description: Current pack amount
+        in: path
+        name: oldAmount
+        required: true
+        type: integer
+      - description: New pack amount
+        in: path
+        name: newAmount
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pack'
+        "400":
+          description: Invalid amount
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Pack not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Pack with new amount already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a pack
+      tags:
+      - packs
+swagger: "2.0"
